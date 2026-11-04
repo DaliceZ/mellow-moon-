@@ -14,8 +14,8 @@ test('specific meanings, context switching, combined reading and complete journa
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
  const axe=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();expect(axe.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)}))).toEqual([]);
  await page.getByLabel('อ่านแล้วรู้สึกอย่างไรบ้าง?').fill('วันนี้อยากให้เวลากับตัวเอง');
- await page.getByRole('button',{name:'เก็บคำอ่านนี้',exact:true}).click();await expect(page).toHaveURL(/journal/);await page.locator('.entry-reading summary').click();await expect(page.locator('.entry-reading')).toContainText('สามดาบกับสองถ้วย');await expect(page.locator('.entry-reading')).toContainText('วันนี้อยากให้เวลากับตัวเอง');await expect(page.locator('.entry-reading')).toContainText('คำวิจารณ์');
- await page.reload();await page.locator('.entry-reading summary').click();await expect(page.locator('.entry-reading')).toContainText('วันนี้อยากให้เวลากับตัวเอง');
+ await page.getByRole('button',{name:'เก็บคำอ่านนี้',exact:true}).click();await expect(page).toHaveURL(/journal/);await page.locator('.entry-read-button').click();await expect(page.locator('.journal-reading-body')).toContainText('สามดาบกับสองถ้วย');await expect(page.locator('.journal-reading-body')).toContainText('วันนี้อยากให้เวลากับตัวเอง');await expect(page.locator('.journal-reading-body')).toContainText('คำวิจารณ์');
+ await page.reload();await page.locator('.entry-read-button').click();await expect(page.locator('.journal-reading-body')).toContainText('วันนี้อยากให้เวลากับตัวเอง');
  await page.goto('/tarot');await page.setViewportSize({width:1440,height:1000});await page.locator('.card-gesture').first().focus();await page.keyboard.press('Tab');await page.locator('h1').click();await page.screenshot({path:'output/tarot-meaning-desktop.png',fullPage:true});
  await page.setViewportSize({width:375,height:812});await page.screenshot({path:'output/tarot-meaning-mobile.png',fullPage:true});
 });

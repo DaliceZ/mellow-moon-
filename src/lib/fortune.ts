@@ -1,3 +1,4 @@
+import {personalThemes,stableIndex} from './personalReading';
 export const weekdays = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
 export function localDay(date = new Date()) { return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`; }
 export function parseDay(value: string) { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value); if (!m) throw new Error('วันที่ไม่ถูกต้อง'); const [y,mo,d] = m.slice(1).map(Number); const result = new Date(y,mo-1,d,12); if(result.getFullYear()!==y || result.getMonth()!==mo-1 || result.getDate()!==d) throw new Error('วันที่ไม่ถูกต้อง'); return result; }
@@ -18,7 +19,14 @@ export const dayThemes = [
  { ruler:'เสาร์',theme:'จัดที่ว่างให้วันข้างหน้า',overall:'สะสางเรื่องที่ค้างอยู่ทีละอย่าง ทำเท่าที่ไหว แล้วค่อยกลับมาทำต่อ',love:'คุยเรื่องขอบเขตและเวลาของแต่ละคน ความเข้าใจก็เริ่มจากการบอกกัน',work:'ทบทวนสิ่งที่ทำไปแล้ว จดไว้ว่าอะไรควรทำต่อและอะไรพักไว้ก่อนได้',money:'เช็กรายจ่ายประจำสักรายการ อาจพบสิ่งที่เราไม่ได้ใช้แล้ว',wellness:'จัดมุมพักเล็ก ๆ ให้สบายขึ้น แล้วให้เวลาตัวเองได้ใช้มันจริง ๆ'},
 ];
 const personal = ['ลองให้เครดิตตัวเองกับสิ่งที่ทำสำเร็จแล้วด้วยนะ','เผื่อเวลาอยู่กับความรู้สึกของตัวเองก่อนนอนสักนิด','เลือกใช้แรงกับเรื่องที่สำคัญกับเราจริง ๆ','ถ้าไม่แน่ใจ ถามให้ชัดก่อนรับปากก็ได้','การขอคำแนะนำไม่จำเป็นต้องรอจนไปต่อไม่ไหวนะ','อย่าลืมเก็บเวลาดี ๆ ไว้ให้สิ่งที่ชอบด้วย','เว้นที่ให้แผนเปลี่ยนได้บ้าง เราไม่ต้องควบคุมทุกอย่าง'];
-export function getReading(day: string, birth?: string) { const date=parseDay(day), weekday=date.getDay(); return {...dayThemes[weekday],day,weekday,ruleId:`weekday-ruler-v1-${weekday}`,personal:birth?personal[birthWeekday(birth)]: 'เพิ่มวันเกิดได้ หากอยากมีข้อความชวนคิดตามวันเกิดของตัวเอง',birthDay:birth?birthWeekday(birth):null}; }
+export function getReading(day:string,birth?:string,identity?:string){
+ const date=parseDay(day),weekday=date.getDay();if(birth)parseDay(birth);
+ const person=identity||birth||'guest';const key=`personal-reflection-v2|${person}|${birth||''}|${day}`;
+ const library=[...dayThemes,...personalThemes];
+ const select=(category:'overall'|'love'|'work'|'money'|'wellness')=>library[stableIndex(`${key}|${category}`)%library.length][category];
+ const focus=library[stableIndex(`${key}|overall`)%library.length];
+ return {...dayThemes[weekday],theme:focus.theme,overall:select('overall'),love:select('love'),work:select('work'),money:select('money'),wellness:select('wellness'),day,weekday,ruleId:'personal-reflection-v2',personKey:stableIndex(`${person}|${birth||''}`).toString(16),personal:birth?personal[(birthWeekday(birth)+stableIndex(key))%personal.length]:'',birthDay:birth?birthWeekday(birth):null};
+}
 export const colors = [
  {name:'แดงกุหลาบ',hex:'#BA5667',pastel:'#F2CED5',reason:'สีแดงเป็นสีประจำวันอาทิตย์ตามธรรมเนียมสีประจำวันของไทย'},
  {name:'เหลืองละมุน',hex:'#EBCB75',pastel:'#FBF0CC',reason:'สีเหลืองเป็นสีประจำวันจันทร์ตามธรรมเนียมสีประจำวันของไทย'},

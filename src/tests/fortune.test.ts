@@ -9,7 +9,9 @@ describe('calendar inputs',()=>{
 });
 describe('explainable editorial engine',()=>{
  it('has stable results for the same person and local day',()=>expect(getReading('2026-11-04','1994-01-12')).toEqual(getReading('2026-11-04','1994-01-12')));
- it('uses the weekday ruler and makes the seven-day repetition explicit',()=>{const reading=getReading('2026-11-04');expect(reading.ruler).toBe('พุธ');expect(reading.ruleId).toBe('weekday-ruler-v1-3');expect(getReading('2026-11-11').overall).toBe(reading.overall);});
+ it('keeps the calendar ruler but creates a dated personal reading',()=>{const reading=getReading('2026-11-04');expect(reading.ruler).toBe('พุธ');expect(reading.ruleId).toBe('personal-reflection-v2');expect(getReading('2026-11-11')).not.toEqual(reading);});
+ it('separates full birth dates even when birth weekdays match',()=>{const a=getReading('2026-11-04','2000-03-01'),b=getReading('2026-11-04','2000-03-08');expect(a.birthDay).toBe(b.birthDay);expect([a.overall,a.love,a.work,a.money,a.wellness]).not.toEqual([b.overall,b.love,b.work,b.money,b.wellness]);});
+ it('separates guest identities and remains stable across devices with matching profile identity',()=>{expect(getReading('2026-11-04',undefined,'guest-a')).not.toEqual(getReading('2026-11-04',undefined,'guest-b'));expect(getReading('2026-11-04','2000-03-01','2000-03-01|เมย์')).toEqual(getReading('2026-11-04','2000-03-01','2000-03-01|เมย์'));expect(getReading('2026-11-04','2000-03-01','เมย์').personKey).not.toBe(getReading('2026-11-04','2000-03-01','มิน').personKey);});
  it('changes the birth-weekday reflection',()=>expect(getReading('2026-11-04','2000-02-29').personal).not.toBe(getReading('2026-11-04','2000-03-01').personal));
  it('does not invent birth information for a guest',()=>expect(getReading('2026-11-04').birthDay).toBeNull());
  it('contains seven traditional weekday colors',()=>{expect(colors).toHaveLength(7);expect(colors[3].name).toContain('เขียว');expect(new Set(colors.map(c=>c.hex)).size).toBe(7);});

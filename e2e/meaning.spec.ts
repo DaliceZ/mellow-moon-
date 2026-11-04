@@ -1,0 +1,21 @@
+import {test,expect} from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+test('specific meanings, context switching, combined reading and complete journal snapshot',async({page})=>{
+ await page.setViewportSize({width:375,height:812});await page.goto('/tarot');
+ await page.evaluate(()=>localStorage.setItem('mm.tarot.session.v1',JSON.stringify({id:'meanings-test',date:'2026-11-04',mode:'three',cards:[{id:52,reversed:false},{id:37,reversed:false},{id:14,reversed:true}],revealed:[0,1,2],allowReversed:true})));await page.reload();
+ await expect(page.locator('.card-interpretation')).toHaveCount(3);
+ await expect(page.locator('.card-interpretation').first()).toContainText('ความรู้สึกนี้ไม่ต้องถูกรีบแก้ด้วยคำปลอบ');
+ await expect(page.locator('.spread-story')).toContainText('สามดาบกับสองถ้วย');
+ const ids=await page.locator('.card-obverse [data-card-art]').evaluateAll(els=>els.map(e=>e.getAttribute('data-card-art')));
+ await page.getByRole('button',{name:'ความรัก',exact:true}).click();await expect(page.locator('.meaning-context')).toHaveCount(3);await expect(page.locator('.meaning-context').first()).toContainText('คุยสิ่งที่ทำให้เจ็บ');
+ await page.getByRole('button',{name:'งานและการเรียน',exact:true}).click();await expect(page.locator('.meaning-context').first()).toContainText('คำวิจารณ์');
+ expect(await page.locator('.card-obverse [data-card-art]').evaluateAll(els=>els.map(e=>e.getAttribute('data-card-art')))).toEqual(ids);
+ await page.locator('.meaning-symbol summary').first().click();await expect(page.locator('.meaning-symbol').first()).toContainText('หัวใจถูกดาบสามเล่ม');
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+ const axe=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();expect(axe.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)}))).toEqual([]);
+ await page.getByLabel('อ่านแล้วรู้สึกอย่างไรบ้าง?').fill('วันนี้อยากให้เวลากับตัวเอง');
+ await page.getByRole('button',{name:'เก็บคำอ่านนี้',exact:true}).click();await expect(page).toHaveURL(/journal/);await page.locator('.entry-reading summary').click();await expect(page.locator('.entry-reading')).toContainText('สามดาบกับสองถ้วย');await expect(page.locator('.entry-reading')).toContainText('วันนี้อยากให้เวลากับตัวเอง');await expect(page.locator('.entry-reading')).toContainText('คำวิจารณ์');
+ await page.reload();await page.locator('.entry-reading summary').click();await expect(page.locator('.entry-reading')).toContainText('วันนี้อยากให้เวลากับตัวเอง');
+ await page.goto('/tarot');await page.setViewportSize({width:1440,height:1000});await page.locator('.card-gesture').first().focus();await page.keyboard.press('Tab');await page.locator('h1').click();await page.screenshot({path:'output/tarot-meaning-desktop.png',fullPage:true});
+ await page.setViewportSize({width:375,height:812});await page.screenshot({path:'output/tarot-meaning-mobile.png',fullPage:true});
+});

@@ -1,3 +1,4 @@
+import {dailyActions} from './dailyActions';
 import {personalThemes,stableIndex} from './personalReading';
 export const weekdays = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
 export function localDay(date = new Date()) { return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`; }
@@ -25,7 +26,8 @@ export function getReading(day:string,birth?:string,identity?:string){
  const library=[...dayThemes,...personalThemes];
  const select=(category:'overall'|'love'|'work'|'money'|'wellness')=>library[stableIndex(`${key}|${category}`)%library.length][category];
  const focus=library[stableIndex(`${key}|overall`)%library.length];
- return {...dayThemes[weekday],theme:focus.theme,overall:select('overall'),love:select('love'),work:select('work'),money:select('money'),wellness:select('wellness'),day,weekday,ruleId:'personal-reflection-v2',personKey:stableIndex(`${person}|${birth||''}`).toString(16),personal:birth?personal[(birthWeekday(birth)+stableIndex(key))%personal.length]:'',birthDay:birth?birthWeekday(birth):null};
+ const advice=Object.fromEntries((['overall','love','work','money','wellness'] as const).map(category=>[category,dailyActions[category][stableIndex(`${key}|${category}`)%library.length]])) as Record<'overall'|'love'|'work'|'money'|'wellness',string>;
+ return {...dayThemes[weekday],advice,theme:focus.theme,overall:select('overall'),love:select('love'),work:select('work'),money:select('money'),wellness:select('wellness'),day,weekday,ruleId:'personal-reflection-v2',personKey:stableIndex(`${person}|${birth||''}`).toString(16),personal:birth?personal[(birthWeekday(birth)+stableIndex(key))%personal.length]:'',birthDay:birth?birthWeekday(birth):null};
 }
 export const colors = [
  {name:'แดงกุหลาบ',hex:'#BA5667',pastel:'#F2CED5',reason:'สีแดงเป็นสีประจำวันอาทิตย์ตามธรรมเนียมสีประจำวันของไทย'},

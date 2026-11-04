@@ -14,6 +14,7 @@ describe('explainable editorial engine',()=>{
  it('separates guest identities and remains stable across devices with matching profile identity',()=>{expect(getReading('2026-11-04',undefined,'guest-a')).not.toEqual(getReading('2026-11-04',undefined,'guest-b'));expect(getReading('2026-11-04','2000-03-01','2000-03-01|เมย์')).toEqual(getReading('2026-11-04','2000-03-01','2000-03-01|เมย์'));expect(getReading('2026-11-04','2000-03-01','เมย์').personKey).not.toBe(getReading('2026-11-04','2000-03-01','มิน').personKey);});
  it('changes the birth-weekday reflection',()=>expect(getReading('2026-11-04','2000-02-29').personal).not.toBe(getReading('2026-11-04','2000-03-01').personal));
  it('does not invent birth information for a guest',()=>expect(getReading('2026-11-04').birthDay).toBeNull());
+ it('keeps practical advice stable and present for all five topics',()=>{const a=getReading('2026-11-04','2000-03-01');expect(Object.keys(a.advice)).toHaveLength(5);expect(Object.values(a.advice).every(v=>v.length>15)).toBe(true);expect(a.advice).toEqual(getReading('2026-11-04','2000-03-01').advice);});
  it('contains seven traditional weekday colors',()=>{expect(colors).toHaveLength(7);expect(colors[3].name).toContain('เขียว');expect(new Set(colors.map(c=>c.hex)).size).toBe(7);});
 });
 describe('tarot selection',()=>{

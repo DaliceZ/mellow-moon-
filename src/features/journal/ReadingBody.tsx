@@ -4,7 +4,7 @@ const removed=[
  'เราจะสื่อสารความต้องการกับคนที่รักอย่างไรดี?',
 ];
 export function cleanReading(text:string){return text.split('\n').filter(line=>!removed.some(phrase=>line.includes(phrase))).join('\n');}
-const labels=['ภาพรวม','ความรัก','งานและการเรียน','การเงิน','ดูแลตัวเอง','ข้อความถึงเธอ','ไพ่ของเธอ','ที่ผ่านมา','ตอนนี้','ทางที่อาจลอง','ลองทำ','ชวนคิด','สัญลักษณ์'];
+const labels=['ภาพรวม','ความรัก','งานและการเรียน','การเงิน','ดูแลตัวเอง','ข้อความถึงเธอ','ไพ่ของเธอ','ที่ผ่านมา','ตอนนี้','ทางที่อาจลอง','ลองทำ','ลองทำวันนี้','ชวนคิด','สัญลักษณ์'];
 export function ReadingBody({text,note=false}:{text:string;note?:boolean}){
  if(note)return <div className="journal-reading-body"><p>{text}</p></div>;
  return <div className="journal-reading-body">{cleanReading(text).split(/\n\s*\n/).filter(Boolean).map((block,i)=><section key={i}>{block.split('\n').filter(Boolean).map((line,j)=>{

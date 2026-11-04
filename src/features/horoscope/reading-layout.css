@@ -1,0 +1,22 @@
+.reading-main.reader-card{padding:30px 34px;min-height:0;align-self:start;background:#FFFEFC;border-color:#E3D8E7;box-shadow:0 8px 32px #5C496306}
+.reader-card .reader-header{display:flex;align-items:center;gap:14px;padding-bottom:23px;border-bottom:1px solid #EAE2EB;margin:0}
+.reader-header .round-icon{width:46px;height:46px;border-radius:15px;background:#F0E7F5;color:#78598A}
+.reader-header .reader-owner{font-size:12px;color:#6F6477;line-height:1.6;margin:0 0 3px}
+.reader-card .reader-header h2{font-size:23px;color:#463D52;margin:0;line-height:1.5;letter-spacing:-.3px}
+.reader-header time{margin-left:auto;font-size:12px;line-height:1.7;text-align:right;color:#6F6477;flex-shrink:0}
+.reader-header time span{display:block;font-size:11px}
+.reader-card .reader-content{max-width:640px;margin:0 auto}
+.reader-card .daily-answer{margin:0;padding:27px 0 24px;border:0}
+.reader-card .reading-headline{font-size:22px;line-height:1.6;color:#594568;font-weight:600;margin:0 0 15px;text-wrap:balance;max-width:26em}
+.reading-main.reader-card .daily-answer .reading-text{font-size:19px;line-height:1.9;color:#443D4D;margin:0;max-width:34em;overflow-wrap:anywhere}
+.reader-card .today-step{display:flex;align-items:flex-start;gap:13px;padding:19px 21px;border:1px solid #DED2E5;border-radius:18px;background:#F7F1F9}
+.today-step .step-symbol{height:30px;width:30px;display:grid;place-items:center;background:#E8DCEF;border-radius:50%;color:#6E4D7E;flex-shrink:0;margin-top:2px}
+.today-step h3{font-size:13px;line-height:1.7;color:#765087;font-weight:600;margin:0 0 6px}
+.today-step p{font-size:16px;line-height:1.85;color:#4D4058;margin:0}
+.reader-card .reading-actions{justify-content:flex-start;gap:22px;padding:23px 0 0;margin:0;border:0}
+.reader-card .reading-actions .button{min-height:46px;font-size:13px}
+.reader-card .reading-actions .text-link{min-height:44px;font-size:12px;display:flex;align-items:center}
+.reader-card .period-list{border-top:1px solid #E7DFEA;margin-top:24px;padding-top:20px}
+@media(min-width:1100px){.reading-layout{grid-template-columns:230px minmax(0,1fr);gap:22px}.reading-sidebar{padding:25px 20px}.reader-card .reader-content{padding:0 7px}}
+@media(max-width:800px){.reading-main.reader-card{padding:22px 20px;border-radius:22px}.reader-card .reader-header{gap:11px;padding-bottom:18px}.reader-header .round-icon{width:41px;height:41px;border-radius:13px}.reader-card .reader-header h2{font-size:21px}.reader-header .reader-owner{font-size:11px}.reader-header time{font-size:11px}.reader-card .daily-answer{padding:23px 0 22px}.reader-card .reading-headline{font-size:21px;line-height:1.65;margin-bottom:13px}.reading-main.reader-card .daily-answer .reading-text{font-size:17px;line-height:1.95}.reader-card .today-step{padding:16px 15px;gap:10px;border-radius:16px}.today-step p{font-size:16px;line-height:1.85}.reader-card .reading-actions{gap:9px;justify-content:space-between;padding-top:19px}.reader-card .reading-actions .button{font-size:12px;padding:10px 14px}.reader-card .reading-actions .text-link{font-size:12px}.reader-header time span{font-size:10px}}
+@media(max-width:360px){.reader-header time span{display:none}.reading-main.reader-card{padding:20px 16px}.reader-header .round-icon{width:35px;height:35px}.reader-card .reader-header h2{font-size:20px}}

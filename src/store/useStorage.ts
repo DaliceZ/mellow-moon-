@@ -6,7 +6,7 @@ export function useStorage<T>(key:string, initial:T, valid:(value:unknown)=>valu
  return [state,update];
 }
 export type Profile={name:string;birth:string};
-export type Entry={id:string;date:string;title:string;text:string;kind:'tarot'|'note'|'fortune'};
+export type Entry={id:string;date:string;title:string;text:string;kind:'tarot'|'note'|'fortune';cards?:{id:number;reversed:boolean}[]};
 export function validDay(v:unknown):v is string {try {if(typeof v!=='string')return false;parseDay(v);return true;}catch{return false;}}
 export const isProfile=(v:unknown):v is Profile=>!!v&&typeof v==='object'&&'name'in v&&typeof v.name==='string'&&'birth'in v&&typeof v.birth==='string'&&(!v.birth||validDay(v.birth));
-export const isEntries=(v:unknown):v is Entry[]=>Array.isArray(v)&&v.every(e=>e&&typeof e.id==='string'&&typeof e.text==='string'&&validDay(e.date)&&typeof e.title==='string'&&['tarot','note','fortune'].includes(e.kind));
+export const isEntries=(v:unknown):v is Entry[]=>Array.isArray(v)&&v.every(e=>e&&typeof e.id==='string'&&typeof e.text==='string'&&validDay(e.date)&&typeof e.title==='string'&&['tarot','note','fortune'].includes(e.kind)&&(!e.cards||(Array.isArray(e.cards)&&e.cards.every((c:{id:number;reversed:boolean})=>Number.isInteger(c.id)&&c.id>=0&&c.id<78&&typeof c.reversed==='boolean'))));
